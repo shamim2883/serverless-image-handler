@@ -258,6 +258,32 @@ export class ImageRequest {
     }
   }
 
+  private aroggaEdits(decoded) {
+    if( decoded.key && ( decoded.key.startsWith('medicine') || decoded.key.startsWith('Product-p_images') || decoded.key.startsWith('ProductVariant-pv_images') ) ){
+      if( !decoded.edits || decoded.edits.length === 0 || !decoded.edits.resize || decoded.edits.resize.length === 0 || !decoded.edits.resize?.width || !decoded.edits.resize?.height || decoded.edits.resize.width > 500 || decoded.edits.resize.height > 500 ){ 
+        decoded.edits = {
+          resize: {
+            width: 1000,
+            height: 1000,
+            fit: "outside"
+          },
+          overlayWith: {
+            bucket: "arogga",
+            key: "misc/wm.png",
+            alpha: 95
+          }
+        }
+      }
+      if( decoded.edits.resize.width !== decoded.edits.resize.height || ![200,300,1000].includes(decoded.edits.resize.width) ){
+        throw new ImageHandlerError(
+          StatusCodes.BAD_REQUEST,
+          "ImageEdits::CannotParseEdits",
+          "Invalid size. Please use 200x200, 300x300 or 1000x1000."
+        );
+      }
+    }
+  }
+
   /**
    * Parses the edits to be made to the original image.
    * @param event Lambda request body.
@@ -267,6 +293,7 @@ export class ImageRequest {
   public parseImageEdits(event: ImageHandlerEvent, requestType: RequestTypes): ImageEdits {
     if (requestType === RequestTypes.DEFAULT) {
       const decoded = this.decodeRequest(event);
+      this.aroggaEdits(decoded);
       return decoded.edits;
     } else if (requestType === RequestTypes.THUMBOR) {
       const thumborMapping = new ThumborMapper();

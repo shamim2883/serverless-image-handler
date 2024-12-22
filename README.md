@@ -73,6 +73,9 @@ overrideWarningsEnabled=false npx cdk deploy\
  --parameters DeployDemoUIParameter=Yes\
   --parameters SourceBucketsParameter=<MY_BUCKET>\
    --profile <PROFILE_NAME>
+
+
+overrideWarningsEnabled=false npx cdk deploy --parameters DeployDemoUIParameter=No --parameters SourceBucketsParameter="arogga,arogga-staging" --parameters CorsEnabledParameter=Yes --parameters LogRetentionPeriodParameter=1 --parameters AutoWebPParameter=Yes
 ```
 
 _Note:_

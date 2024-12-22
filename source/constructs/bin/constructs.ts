@@ -23,7 +23,7 @@ const solutionDisplayName = "Serverless Image Handler";
 const solutionVersion = VERSION ?? app.node.tryGetContext("solutionVersion");
 const description = `(${app.node.tryGetContext("solutionId")}) - ${solutionDisplayName}. Version ${solutionVersion}`;
 // eslint-disable-next-line no-new
-new ServerlessImageHandlerStack(app, "ServerlessImageHandlerStack", {
+new ServerlessImageHandlerStack(app, app.node.tryGetContext("solutionName"), {
   synthesizer,
   description,
   solutionId: app.node.tryGetContext("solutionId"),

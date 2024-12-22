@@ -174,17 +174,17 @@ export class BackEnd extends Construct {
     });
 
     const cloudFrontDistributionProps: DistributionProps = {
-      comment: "Image Handler Distribution for Serverless Image Handler",
+      comment: `${props.solutionName} - Image Handler Distribution for Serverless Image Handler`,
       defaultBehavior: {
         origin,
         allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
-        viewerProtocolPolicy: ViewerProtocolPolicy.HTTPS_ONLY,
+        viewerProtocolPolicy: ViewerProtocolPolicy.ALLOW_ALL, //ViewerProtocolPolicy.ALLOW_ALL,
         originRequestPolicy,
         cachePolicy,
       },
       priceClass: props.cloudFrontPriceClass as PriceClass,
-      enableLogging: true,
-      logBucket: props.logsBucket,
+      enableLogging: false,
+      // logBucket: props.logsBucket,
       logFilePrefix: "api-cloudfront/",
       errorResponses: [
         { httpStatus: 500, ttl: Duration.minutes(10) },
